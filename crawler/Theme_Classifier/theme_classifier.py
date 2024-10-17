@@ -42,7 +42,7 @@ class themeClassifier:
         
         # Run model inference on all batches
         theme_output = self.theme_classifier(
-            script_batches[:2],  # Process all batches instead of limiting to [:2]
+            script_batches,  # Process all batches instead of limiting to [:2]
             self.theme_list,
             multi_label=True
         )
@@ -67,7 +67,6 @@ class themeClassifier:
         
         # Load and process the dataset
         df = extract_dialogue(dataset_path)
-        df=df.head(2)
         # Inference: classify themes for each dialogue/script
         output_themes = df["Script"].apply(self.get_theme_inference)
         theme_df = pd.DataFrame.from_dict(output_themes.tolist())
