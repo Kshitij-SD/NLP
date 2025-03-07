@@ -33,4 +33,3 @@ def extract_dialogue(file_path):
     # Create a DataFrame with the movie names and scripts
     df = pd.DataFrame({"Movie": movie_name, "Script": scripts})
     return df
- 
