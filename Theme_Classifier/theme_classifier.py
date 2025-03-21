@@ -7,10 +7,6 @@ import pandas as pd
 import numpy as np
 import pathlib
 import sys
-
-# Set up folder path and utility imports
-folder_path = pathlib.Path(__file__).parent.resolve()
-sys.path.append(str(folder_path) + "/../")
 from utils import extract_dialogue
 
 # Download NLTK data for sentence tokenization
@@ -60,23 +56,28 @@ class themeClassifier:
         return themes
 
     def get_themes(self, dataset_path, save_path=None):
-        # Read and return saved output if it already exists
         if save_path is not None and os.path.exists(save_path):
             df = pd.read_csv(save_path)
             return df
         
-        # Load and process the dataset
         df = extract_dialogue(dataset_path)
-        df=df.head(2)
-        # Inference: classify themes for each dialogue/script
+
+        # Debug
+        print(f"Extracted {len(df)} scripts")
+
         output_themes = df["Script"].apply(self.get_theme_inference)
-        theme_df = pd.DataFrame.from_dict(output_themes.tolist())
-        
-        # Join the themes dataframe to the original one
+        theme_df = pd.DataFrame(output_themes.tolist())
+
+        # Debug theme columns
+        print(f"Themes detected: {theme_df.columns.tolist()}")
+
         df[theme_df.columns] = theme_df
-        
-        # Save the output if a save path is provided
+
+        # Save if path provided
         if save_path is not None:
             df.to_csv(save_path, index=False)
-        
-        return df
+
+        # Return only relevant columns
+        return df[['Movie', 'Script'] + list(theme_df.columns)]
+            
+
