@@ -38,7 +38,7 @@ class themeClassifier:
         
         # Run model inference on all batches
         theme_output = self.theme_classifier(
-            script_batches[:2],  # Process all batches instead of limiting to [:2]
+            script_batches,  # Process all batches instead of limiting to [:2]
             self.theme_list,
             multi_label=True
         )
@@ -61,10 +61,6 @@ class themeClassifier:
             return df
         
         df = extract_dialogue(dataset_path)
-
-        # Debug
-        print(f"Extracted {len(df)} scripts")
-
         output_themes = df["Script"].apply(self.get_theme_inference)
         theme_df = pd.DataFrame(output_themes.tolist())
 
